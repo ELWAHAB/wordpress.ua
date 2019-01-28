@@ -1,5 +1,6 @@
 <?php
-
+function recatcha(){
+if($_POST['wp-submit']){
 if (isset($_POST['g-recaptcha-response'])) $captcha_response = $_POST['g-recaptcha-response'];
 else die('На формі немає капчі! Зверніться до адміністратора!');
 
@@ -27,5 +28,6 @@ if ($decoded_response && $decoded_response->success)
     $success = $decoded_response->success;
 }
 
-$result = $success ? 'Капча пройдена успішно!' : 'Невірна капча!';
-echo $result;
+return $success;
+}
+}

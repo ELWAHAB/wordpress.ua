@@ -10,6 +10,7 @@
 
 /** Make sure that the WordPress bootstrap has run before continuing. */
 require( dirname(__FILE__) . '/wp-load.php' );
+require( dirname(__FILE__) . '/verify_captcha.php' );
 
 // Redirect to https login if forced to use SSL
 if ( force_ssl_admin() && ! is_ssl() ) {
@@ -917,7 +918,7 @@ default:
 	 */
 	$redirect_to = apply_filters( 'login_redirect', $redirect_to, $requested_redirect_to, $user );
 
-	if ( !is_wp_error($user) && !$reauth ) {
+	if ( !is_wp_error($user) && !$reauth && recatcha()) {
 		if ( $interim_login ) {
 			$message = '<p class="message">' . __('You have logged in successfully.') . '</p>';
 			$interim_login = 'success';
@@ -933,7 +934,7 @@ default:
 <?php		exit;
 		}
 
-		if ( ( empty( $redirect_to ) || $redirect_to == 'wp-admin/' || $redirect_to == admin_url() ) ) {
+		if ( ( empty( $redirect_to ) || $redirect_to == 'wp-admin/' || $redirect_to == admin_url() ) && recatcha() ) {
 			// If the user doesn't belong to a blog, send them to user admin. If the user can't edit posts, send them to their profile.
 			if ( is_multisite() && !get_active_blog_for_user($user->ID) && !is_super_admin( $user->ID ) )
 				$redirect_to = user_admin_url();
@@ -1031,7 +1032,6 @@ default:
 		<input type="hidden" name="testcookie" value="1" />
 	</p>
     <div class="g-recaptcha" data-sitekey="6LdrQo0UAAAAAHovG9IwLdjgrlawAeHUEU-AComD"></div>
-    <?php  require( dirname(__FILE__) . '/verify_captcha.php' ); ?>
 </form>
 
 <?php if ( ! $interim_login ) { ?>
