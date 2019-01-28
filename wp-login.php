@@ -171,6 +171,7 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 	$classes = apply_filters( 'login_body_class', $classes, $action );
 
 	?>
+        <script src='https://www.google.com/recaptcha/api.js'></script>
 	</head>
 	<body class="login <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 	<?php
@@ -1029,6 +1030,8 @@ default:
 <?php   endif; ?>
 		<input type="hidden" name="testcookie" value="1" />
 	</p>
+    <div class="g-recaptcha" data-sitekey="6LdrQo0UAAAAAHovG9IwLdjgrlawAeHUEU-AComD"></div>
+    <?php  require( dirname(__FILE__) . '/verify_captcha.php' ); ?>
 </form>
 
 <?php if ( ! $interim_login ) { ?>
@@ -1042,6 +1045,7 @@ default:
 
 		echo esc_html( $login_link_separator );
 	endif;
+
 	?>
 	<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php _e( 'Lost your password?' ); ?></a>
 <?php endif; ?>
