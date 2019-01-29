@@ -972,7 +972,10 @@ default:
 			$errors->add('registered', __('Registration complete. Please check your email.'), 'message');
 		elseif ( strpos( $redirect_to, 'about.php?updated' ) )
 			$errors->add('updated', __( '<strong>You have successfully updated WordPress!</strong> Please log back in to see what&#8217;s new.' ), 'message' );
-	}
+        elseif (!recatcha())
+            $errors->add('recaptcha', __( 'Пройдіть, будь ласка, reCAPTCHA !' ), 'message' );
+
+    }
 
 	/**
 	 * Filters the login page errors.
